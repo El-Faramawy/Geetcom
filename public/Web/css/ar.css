@@ -1,0 +1,62 @@
+.topHeader .search button, .topHeader .search [type="submit"] {
+    left: unset;
+    right: 13px;
+}
+
+.topHeader .head_info li {
+    padding-left: 25px;
+    padding-right: unset;
+}
+
+.topHeader .head_info li > span {
+    left: 0;
+    right: unset;
+}
+
+.main-header .mn_icon {
+     right: unset;
+     left: 10px;
+}
+
+.main-header .main_menu li > a {
+    padding: 30px 20px 30px 35px !important;
+}
+ 
+.main-col span {
+    margin-right: unset;
+    margin-left: 10px;
+}
+
+.hero-hov::before {
+    content: '\f061';
+    left: unset ;
+    right: 40px;
+    transform: translateY(-50%);
+}
+
+.hero-hov:hover::before {
+    content: '\f061';
+    opacity: 1;
+    left:  unset;
+    right: 25px;
+}
+
+.chose-doctor .select-div .select2-container--default .select2-selection--single .select2-selection__arrow {
+    left: unset !important;
+    right: 1px !important; 
+}
+
+
+.down-option i  {
+padding-right: unset !important;
+padding-left: 10px;
+}
+
+.contact-info-address .info-contact h3 {
+    padding-left: unset;
+    padding-right: 25px;
+}
+
+.fa-arrow-left:before {
+    content: '\f061' !important;
+}

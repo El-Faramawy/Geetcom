@@ -1,0 +1,9 @@
+<svg id="gym" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <line id="Line_24" data-name="Line 24" x2="15" transform="translate(0.5 15.5)" fill="none" stroke="#404040" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+  <path id="Path_4646" data-name="Path 4646" d="M8,0l3,1.5L8,3Z" fill="#3b3b3b"/>
+  <path id="Path_4647" data-name="Path 4647" d="M1.5,13.5V6A1.5,1.5,0,0,1,3,4.5H13A1.5,1.5,0,0,1,14.5,6v7.5" fill="none" stroke="#404040" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+  <path id="Path_4648" data-name="Path 4648" d="M6.5,13.5v-4h3v4" fill="none" stroke="#404040" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+  <rect id="Rectangle_2254" data-name="Rectangle 2254" width="1" height="1" transform="translate(7.5 7)" fill="#3b3b3b"/>
+  <rect id="Rectangle_2255" data-name="Rectangle 2255" width="1" height="1" transform="translate(5 7)" fill="#3b3b3b"/>
+  <rect id="Rectangle_2256" data-name="Rectangle 2256" width="1" height="1" transform="translate(10 7)" fill="#3b3b3b"/>
+</svg>
