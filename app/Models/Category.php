@@ -34,10 +34,10 @@ class Category extends Model
     }
 //
 //    //===================  products ===========================
-//    public function products()
-//    {
-//        return $this->hasMany(Product::class);
-//    }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
     //===================  market category ===========================
     public function market_category()
     {

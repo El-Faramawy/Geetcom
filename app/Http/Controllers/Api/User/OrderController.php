@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\NotificationTrait;
 use App\Http\Traits\PaginateTrait;
 use App\Http\Traits\PhotoTrait;
 use App\Http\Traits\WithRelationTrait;
+use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\CouponUser;
+use App\Models\Market;
 use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\OrderDetailsAdditions;
@@ -20,7 +23,7 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
-    use WithRelationTrait, PaginateTrait,PhotoTrait;
+    use WithRelationTrait, PaginateTrait,PhotoTrait,NotificationTrait;
     //======================================================================
     public function coupon(Request $request){
         $validator = Validator::make($request->all(),[
@@ -81,7 +84,7 @@ class OrderController extends Controller
             return $this->apiResponse(null, 'coupon is used before','simple', 411);
         }
 
-        $data = $request->only('pay_type', 'total', 'address_id', 'coupon_id','market_id', 'notes');
+        $data = $request->only('pay_type', 'total', 'address_id', 'coupon_id','market_id', 'notes', 'delivery_price');
         $data['user_id'] = user_api()->user()->id;
         if ($request->pay_type == 'wallet'){
             if (user_api()->user()->wallet >= $data['total'] ){
@@ -89,15 +92,19 @@ class OrderController extends Controller
                 $data['wallet_pay'] = $data['total'];
                 $data['status'] = 'new';
             }else{
-                $data['status'] = 'not_paid';
-                $data['wallet_pay'] = user_api()->user()->wallet;
-                $data['online_pay'] = $data['total'] - user_api()->user()->wallet;
+                return $this->apiResponse(null, 'wallet is not enough','simple', 412);
+
+//                $data['status'] = 'not_paid';
+//                $data['wallet_pay'] = user_api()->user()->wallet;
+//                $data['online_pay'] = $data['total'] - user_api()->user()->wallet;
             }
         }else{
-            $data['status'] = 'not_paid';
+            $data['status'] = 'new';
             $data['online_pay'] = $data['total'];
         }
         $order = Order::create($data);
+
+        Cart::where('user_id',user_api()->user()->id)->delete();
 
         if ($request->coupon_id && $request->coupon_id != null){
             CouponUser::where(['user_id' => user_api()->user()->id, 'coupon_id' => $request->coupon_id])->update(['is_paid' => 'yes']);
@@ -118,12 +125,12 @@ class OrderController extends Controller
             }
         }
 
-//        $this->sendNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
-//        $this->sendFCMNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
-
         $order = Order::where('id', $order->id)
             ->with($this->orderRelations())
             ->first();
+
+        $this->sendAllNotifications([$order->market_id], 'لديك طلب جديد', 'لديك طلب جديد','market',$order);
+
         return $this->apiResponse($order,'','simple');
     }
 
@@ -181,6 +188,12 @@ class OrderController extends Controller
                 'market_rate' => $request->market_rate,
                 'delivery_rate' => $request->delivery_rate,
             ]);
+//            $market_rate = $order->market->rating;
+//            $market_id = $order->market_id;
+//            $all_rates = Rate::whereHas('order',function ($query) use ($market_id){
+//                $query->where('market_id',$market_id);
+//            })->pluck('market_rate')->toArray();
+//            $order->market()->update($rate);
             return $this->apiResponse($rate,'','simple');
         }else{
             return $this->apiResponse(null,'cant rate ','simple',409);
@@ -197,17 +210,45 @@ class OrderController extends Controller
 
         $support = Support::create($data);
 
-        foreach ($request->products as $product){
-            SupportProducts::create([
-                'support_id'=>$support->id,
-                'product_id'=>$product['product_id'],
-                'amount'=>$product['amount'],
-            ]);
+        if ($request->products){
+            foreach ($request->products as $product){
+                SupportProducts::create([
+                    'support_id'=>$support->id,
+                    'product_id'=>$product['product_id'],
+                    'amount'=>$product['amount'],
+                ]);
+            }
         }
 
         return $this->apiResponse($support,'','simple');
 
-
     }
+    //================================================================================================
+    public function change_order_status(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'order_id'      => 'required|exists:orders,id',
+//            'status'        => 'required|in:accepted,canceled_from_market',
+        ]);
+        if ($validator->fails()) {
+            return $this->apiResponse(null, $validator->errors(),'simple', 422);
+        }
+
+        $order = Order::where('id', $request->order_id)->with($this->orderRelations())->first();
+        $order->update(['status'=>'new']);
+
+//        $this->cancelOrder($order);
+
+//        if($order->status == 'accepted'){
+//            $order->update(['from'=>date('H:i:s',strtotime('+'.market_api()->user()->min_from . ' minutes')) ,
+//                'to'=>date('H:i:s',strtotime('+'.market_api()->user()->min_to . ' minutes')),
+//                'accepted_time'=>date('H:i:s')]);
+//        }
+//        $this->sendNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
+//        $this->sendFCMNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
+
+        return $this->apiResponse($order,'','simple');
+    }
+
 
 }

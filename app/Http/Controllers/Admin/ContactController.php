@@ -14,7 +14,6 @@ use App\Models\Notification;
 class ContactController extends Controller
 {
     use NotificationTrait;
-    use SendEmail;
 
     public function index(Request $request)
     {
@@ -84,12 +83,7 @@ class ContactController extends Controller
     {
         $contact = Contact::where('id', $request->contact_id)->first();
 
-        $this->sendNotification([$contact->user_id], 'تم الرد على رسالتك', $request->message);
-        $this->sendFCMNotification([$contact->user_id], 'تم الرد على رسالتك', $request->message);
-
-        $email = $contact->mail ??'';
-        if (filter_var($email, FILTER_VALIDATE_EMAIL))
-            $this->send_EmailFun($email,$request->message,'تم الرد على رسالتك');
+        $this->sendAllNotifications([$contact->user_id], 'تم الرد على رسالتك', $request->message);
 
         return response()->json(
             [

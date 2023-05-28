@@ -11,21 +11,44 @@
                     <form  action="{{route('notifications.store')}}" id="Form" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-lg-12 col-md-12">
-                                <div class="form-group">
+                            <div class="form-group col-12">
+                                <label >نوع الرسالة</label>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="form-check m-0 ">
+                                        <input class="form-check-input  " type="radio" name="type" value="notification" checked>
+                                        <label class="form-check-label ms-5" style="margin-right: 20px;">
+                                            اشعار
+                                        </label>
+                                    </div>
+                                    <div class="form-check m-0  ms-3" style="margin-left: 30px!important">
+                                        <input class="form-check-input " type="radio" name="type" value="offer" >
+                                        <label class="form-check-label ms-5" style="margin-right: 20px;">
+                                            عرض
+                                        </label>
+                                    </div>
+                                    <div class="form-check m-0  ms-3" style="margin-left: 30px!important">
+                                        <input class="form-check-input " type="radio" name="type" value="reward" >
+                                        <label class="form-check-label ms-5" style="margin-right: 20px;">
+                                            مكافأة
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                                <div class="form-group col-12">
                                     <label >عنوان الرسالة</label>
                                     <input type="text" class="form-control form-control-solid" placeholder="عنوان الرسالة" name="title" value=""/>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group col-12">
                                     <label >الرسالة</label>
-                                    <textarea  class="form-control form-control-solid"  name="message" /></textarea>
+                                    <textarea  class="form-control form-control-solid"  name="message" ></textarea>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group col-12" id="users_div">
                                     <label >المستخدمين</label>
                                     <div class="form-group form-elements m-0 my-2">
                                         <div class="custom-controls-stacked ">
                                             <label class="custom-control custom-checkbox ">
-                                                <input type="checkbox" class="custom-control-input"  id="checkAll" >
+                                                <input type="checkbox" class="custom-control-input "  id="checkAll" >
                                                 <span class="custom-control-label " style="font-weight: bold"> تحديد الكل </span>
                                             </label>
                                         </div>
@@ -34,8 +57,30 @@
                                         <div class="custom-controls-stacked row">
                                             @foreach($users as $user)
                                                 <label class="custom-control custom-checkbox " style="width: 25%">
-                                                    <input type="checkbox" class="custom-control-input" name="users[]" value="{{$user->id}}" >
-                                                    <span class="custom-control-label">{{$user->name ?? 'ضيف رقم '.$user->id}}</span>
+                                                    <input type="checkbox" class="custom-control-input users" name="users[]" value="{{$user->id}}" >
+                                                    <span class="custom-control-label">{{$user->name }}</span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group col-12" id="delivery_div" style="display: none">
+                                    <label >المندوبين</label>
+                                    <div class="form-group form-elements m-0 my-2">
+                                        <div class="custom-controls-stacked ">
+                                            <label class="custom-control custom-checkbox ">
+                                                <input type="checkbox" class="custom-control-input "  id="checkAllDeliveies" >
+                                                <span class="custom-control-label " style="font-weight: bold"> تحديد الكل </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-elements m-0">
+                                        <div class="custom-controls-stacked row">
+                                            @foreach($deliveries as $delivery)
+                                                <label class="custom-control custom-checkbox " style="width: 25%">
+                                                    <input type="checkbox" class="custom-control-input deliveries" name="deliveries[]" value="{{$delivery->id}}" >
+                                                    <span class="custom-control-label">{{$delivery->name }}</span>
                                                 </label>
                                             @endforeach
                                         </div>
@@ -43,7 +88,6 @@
 
                                 </div>
                             </div>
-                        </div>
 
                         <div class="card-footer ">
                             <input type="submit" class="btn btn-success mt-1" value="ارسال">
@@ -78,6 +122,8 @@
                         $('#global-loader').hide()
                         if (data.success == 'true') {
                             $('#Form')[0].reset();
+                            $('#users_div').show();
+                            $('#delivery_div').hide();
                             my_toaster(data.messages)
                         }
                         if (data.success === 'false') {
@@ -101,8 +147,22 @@
     <!--end::Form-->
     <script>
         $("#checkAll").click(function(){
-            $('input:checkbox').not(this).prop('checked', this.checked);
+            $('.users').not(this).prop('checked', this.checked);
+        });
+        $("#checkAllDeliveies").click(function(){
+            $('.deliveries').not(this).prop('checked', this.checked);
         });
     </script>
-
+    <script>
+        $(document).on('change',"input[name='type']", function (e){
+            e.preventDefault()
+            if ( this.value ==='notification'){
+                $('#users_div').show();
+                $('#delivery_div').hide();
+            }else {
+                $('#users_div').hide();
+                $('#delivery_div').show();
+            }
+        })
+    </script>
 @endpush

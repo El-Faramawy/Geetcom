@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\PhotoTrait;
 use App\Models\Category;
+use App\Models\Market;
+use App\Models\Product;
 use App\Models\Slider;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
@@ -17,26 +19,32 @@ class SliderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()){
-            $sub_categories =Slider::latest()->get();
+            $sub_categories =Slider::with('market','product')->latest()->get();
             return Datatables::of($sub_categories)
                 ->addColumn('action', function ($slider) {
                     $action = '';
-//                    if (in_array(81, admin()->user()->permission_ids)) {
+                    if (in_array(73, admin()->user()->permission_ids)) {
                         $action .= '
                         <button  id="editBtn" class="btn btn-default btn-primary btn-sm mb-2  mb-xl-0 "
                              data-id="' . $slider->id . '" ><i class="fa fa-edit text-white"></i>
                         </button>';
-//                    }
-//                    if(in_array(82,admin()->user()->permission_ids)) {
+                    }
+                    if(in_array(74,admin()->user()->permission_ids)) {
                         $action .=  '
                              <a class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
                              data-id="' . $slider->id . '" ><i class="fa fa-trash-o text-white"></i></a>
                        ';
-//                    }
+                    }
                     return $action;
                 })
-                ->editColumn('image',function ($slider){
-                    return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="'.$slider->image.'">';
+                ->editColumn('type',function ($slider){
+                    return $slider->type=='product'?'منتج':'متجر';
+                })
+                ->addColumn('market',function ($slider){
+                    return $slider->market?$slider->market->name_ar:'';
+                })
+                ->addColumn('product',function ($slider){
+                    return $slider->product?$slider->product->name_ar:'';
                 })
                 ->addColumn('checkbox' , function ($slider){
                     return '<input type="checkbox" class="sub_chk" data-id="'.$slider->id.'">';
@@ -49,21 +57,22 @@ class SliderController extends Controller
     ################ Add Object #################
     public function create()
     {
-        return view('Admin.Slider.parts.create')->render();
+        $products = Product::all();
+        $markets = Market::available()->get();
+        return view('Admin.Slider.parts.create',compact('markets','products'))->render();
     }
 
     public function store(Request $request)
     {
         $valedator = Validator::make($request->all(), [
-            'image'=>'required',
+            'type'=>'required',
         ]);
 
         if ($valedator->fails())
             return response()->json(['messages' => $valedator->errors()->getMessages(), 'success' => 'false']);
 
         $data = $request->all();
-        if ($request->image && $request->image != null)
-            $data['image']    = 'uploads/Slider/'.$this->saveImage($request->image,'uploads/Slider');
+        $request->type == 'product' ?$data['market_id'] = null : $data['product_id']=null;
         Slider::create($data);
 
         return response()->json(
@@ -75,21 +84,23 @@ class SliderController extends Controller
     ################ Edit Slider #################
     public function edit(Slider $slider)
     {
-        return view('Admin.Slider.parts.edit', compact('slider'));
+        $products = Product::all();
+        $markets = Market::available()->get();
+        return view('Admin.Slider.parts.edit', compact('slider','markets','products'));
     }
     ###############################################
     ################ update Slider #################
     public function update(Request $request, Slider $slider)
     {
         $valedator = Validator::make($request->all(), [
-            'image'=>'required',
+            'type'=>'required',
         ]);
+
         if ($valedator->fails())
             return response()->json(['messages' => $valedator->errors()->getMessages(), 'success' => 'false']);
 
         $data = $request->all();
-        if ($request->image && $request->image != null)
-            $data['image']    = 'uploads/Slider/'.$this->saveImage($request->image,'uploads/Slider');
+        $request->type == 'product' ?$data['market_id'] = null : $data['product_id']=null;
         $slider->update($data);
 
         return response()->json(

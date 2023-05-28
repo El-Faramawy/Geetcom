@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\NotificationTrait;
-use App\Http\Traits\SendEmail;
 use App\Models\Delivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,12 +14,12 @@ use App\Models\User;
 
 class NotificationController extends Controller
 {
-    use SendEmail;
     use NotificationTrait;
     public function index(Request $request)
     {
+        $deliveries = Delivery::where(['block'=> 'no','is_available'=>'yes'])->get();
         $users = User::where(['block'=> 'no'/*,'is_active'=>'yes'*/])->get();
-        return view('Admin.Notification.index',compact('users'));
+        return view('Admin.Notification.index',compact('users','deliveries'));
     }
 
     public function store(Request $request)
@@ -38,14 +37,17 @@ class NotificationController extends Controller
             return response()->json(['messages' => $valedator->errors()->getMessages(), 'success' => 'false']);
 
         if ($request->users){
-            $this->sendNotification($request->users,$request->title,$request->message);
-            $this->sendFCMNotification($request->users,$request->title,$request->message);
+            $this->sendAllNotifications($request->users, $request->title,$request->message);
+        }
 
-            foreach ($request->users as $user){
-                $email = User::where('id',$user)->pluck('email')->first();
-                if (filter_var($email, FILTER_VALIDATE_EMAIL))
-                    $this->send_EmailFun($email,$request->message,$request->title);
+        $data = $request->except('users','deliveries');
+        if ($request->deliveries){
+            foreach ($request->deliveries as $delivery){
+                $data['delivery_id'] = $delivery;
+                Notification::create($data);
+                $data['delivery_id'] = null;
             }
+
         }
 
 

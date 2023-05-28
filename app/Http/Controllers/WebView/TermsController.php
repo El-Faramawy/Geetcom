@@ -16,4 +16,12 @@ class TermsController extends Controller
         $setting = Setting::first();
         return view('WebView.privacy', ['setting' => $setting]);
     }
+    public function about(){
+        $setting = Setting::first();
+        return view('WebView.about', ['setting' => $setting]);
+    }
+    public function training(){
+        $setting = Setting::first();
+        return view('WebView.training', ['setting' => $setting]);
+    }
 }

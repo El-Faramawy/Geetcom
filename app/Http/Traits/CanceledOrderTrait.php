@@ -6,21 +6,26 @@ use App\Models\CouponUser;
 
 Trait  CanceledOrderTrait
 {
-
+//use NotificationTrait;
     //===================  cancelOrder ===========================
     private function cancelOrder($order = '')
     {
-//        if ($order->status == 'canceled_from_market' ){
-//            $this->sendNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
-//            $this->sendFCMNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
-//        }elseif ($order->status == 'canceled_from_market'){
-//            $this->sendNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
-//            $this->sendFCMNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
+        if ($order->status == 'canceled_from_market' ){
+            $this->sendAllNotifications([$order->user_id], 'تم الغاء الطلب ', 'تم الغاء الطلب من المتجر','user',$order);
+            if ($order->delivery_id)
+                $this->sendAllNotifications([$order->delivery_id], 'تم الغاء الطلب ', 'تم الغاء الطلب من الادمن','delivery',$order);
 
-//        }elseif ($order->status == 'canceled_from_market'){
-//            $this->sendNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
-//            $this->sendFCMNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
-//        }
+        }elseif ($order->status == 'canceled_from_delivery'){
+            $this->sendAllNotifications([$order->user_id], 'تم الغاء الطلب ', 'تم الغاء الطلب من المندوب','user',$order);
+        }
+        elseif ($order->status == 'canceled_from_admin'){
+            $this->sendAllNotifications([$order->user_id], 'تم الغاء الطلب ', 'تم الغاء الطلب من الادمن','user',$order);
+            if ($order->market_id)
+                $this->sendAllNotifications([$order->market_id], 'تم الغاء الطلب ', 'تم الغاء الطلب من الادمن','market',$order);
+            if ($order->delivery_id)
+                $this->sendAllNotifications([$order->delivery_id], 'تم الغاء الطلب ', 'تم الغاء الطلب من الادمن','delivery',$order);
+        }
+
         $this->returnBackData($order);
 
     }

@@ -4,18 +4,21 @@ namespace App\Http\Controllers\Api\Market;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CanceledOrderTrait;
+use App\Http\Traits\NotificationTrait;
 use App\Http\Traits\PaginateTrait;
 use App\Http\Traits\WithRelationTrait;
+use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\OrderDetailsAdditions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
-    use WithRelationTrait, PaginateTrait , CanceledOrderTrait;
+    use WithRelationTrait, PaginateTrait , CanceledOrderTrait,NotificationTrait;
 
     /*================================================*/
     public function change_order_status(Request $request)
@@ -35,10 +38,29 @@ class OrderController extends Controller
 
         if($order->status == 'accepted'){
             $order->update(['from'=>date('H:i:s',strtotime('+'.market_api()->user()->min_from . ' minutes')) ,
-                'to'=>date('H:i:s',strtotime('+'.market_api()->user()->min_to . ' minutes')) ]);
+                'to'=>date('H:i:s',strtotime('+'.market_api()->user()->min_to . ' minutes')),
+                'accepted_time'=>date('H:i:s')]);
+//            $this->sendAllNotifications([$order->user_id], 'تم قبول الطلب من المتجر', 'تم قبول الطلب من المتجر','user',$order);
+            $deliveries = Delivery::whereHas('orders',function ($query){
+                $query->whereIn('status',['accepted','in_market_way','wait_order','delivery']);
+            })
+//                ->selectRaw('id, ( 3959 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance', [$order->address->latitude, $order->address->longitude, $order->address->latitude])
+                ->pluck('id')->toArray();
+
+            $otherDel = Delivery::whereNotIn('id',$deliveries)
+                ->selectRaw('id, ( 3959 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance', [$order->address->latitude, $order->address->longitude, $order->address->latitude])
+                ->get();
+            $del = [];
+            foreach ($otherDel as $delivery){
+                if ($delivery->distance <= setting()->num_of_kilos_for_delivery){
+                    $del[] = $delivery->id;
+                }
+            }
+
+
+            $this->sendAllNotifications([$order->user_id], 'تم قبول طلبك', 'تم قبول طلبك من المطعم','user',$order);
+            $this->sendAllNotifications($del, 'طلب جديد', 'يوجد طلب جديد بالقرب منك','delivery',$order);
         }
-//        $this->sendNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
-//        $this->sendFCMNotification(null, 'nuovo ordine ', 'nuovo ordine per te','admin');
 
         return $this->apiResponse($order,'','simple');
     }
@@ -57,6 +79,14 @@ class OrderController extends Controller
 
             $order = Order::where('market_id',market_api()->user()->id)
                 ->whereIn('status',['canceled_from_market', 'canceled_from_delivery','canceled_from_admin','ended'])
+                ->with($this->orderRelations());
+
+        return $this->apiResponse($order);
+    }
+    /*================================================*/
+    public function orders_by_status(Request $request){
+
+            $order = Order::where(['market_id'=>market_api()->user()->id,'status'=>$request->status])
                 ->with($this->orderRelations());
 
         return $this->apiResponse($order);

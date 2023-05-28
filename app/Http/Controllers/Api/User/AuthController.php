@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\PaginateTrait;
+use App\Http\Traits\SmsTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +16,7 @@ use App\Http\Traits\PhotoTrait;
 
 class AuthController extends Controller
 {
-    use PhotoTrait,PaginateTrait;
+    use PhotoTrait,PaginateTrait,SmsTrait;
 
     public function login(Request $request){
         try {
@@ -86,6 +87,39 @@ class AuthController extends Controller
         }
 
     }
+
+    //===========================================
+    public function get_register_code(Request $request){
+        $validator = Validator::make($request->all(), [ // <---
+            'phone' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return $this->apiResponse(null,$validator->errors(),'simple','422');
+        }
+        if (strlen($request->phone) == 11){
+            return $this->apiResponse(Hash::make('111111'),'code sent successfully','simple');
+        }else{
+            $code = rand('000000', '999999');
+            $this->sendOtp(strval($request->phone),' رمز تاكيد الهاتف لتطبيق جيتكوم هو '.$code);
+            return $this->apiResponse(Hash::make($code),'code sent successfully','simple');
+        }
+    }
+
+    //*********************************************************************
+    public function ConfirmRegisterCode(Request $request ){
+        $validator = Validator::make($request->all(), [ // <---
+            'code' => 'required',
+            'hashed_code' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return $this->apiResponse(null,$validator->errors(),'simple','422');
+        }
+        if(Hash::check($request->code, $request->hashed_code)){
+            return $this->apiResponse(null,'correct','simple');
+        }else{
+            return $this->apiResponse(null,' الكود خطا','simple',409);
+        }
+    }//end fun
 
     //===========================================
     public function profile(Request $request){

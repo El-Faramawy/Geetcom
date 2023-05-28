@@ -26,13 +26,13 @@ class AddressController extends Controller
             'address'=>'required',
         ]);
         if ($validator->fails()){
-            return $this->apiResponse(null,$validator->errors(),'422');
+            return $this->apiResponse(null,$validator->errors(),'simple','422');
         }
         $data = $request->only('name','recipient_name','address','recipient_number','latitude','longitude');
         $data['user_id'] = user_api()->user()->id;
         $address = Address::create($data);
 
-        return $this->apiResponse($address);
+        return $this->apiResponse($address,'','simple');
     }
 //    //================================================================================
 //    public function editAddress(Request $request){

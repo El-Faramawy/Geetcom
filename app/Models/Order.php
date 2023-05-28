@@ -27,6 +27,9 @@ class Order extends Model
     public function address(){
         return $this->belongsTo(Address::class,'address_id');
     }
+    public function market(){
+        return $this->belongsTo(Market::class,'market_id');
+    }
     public function getIsRatedAttribute(){
         return Rate::where('order_id', $this->id)->count();
     }

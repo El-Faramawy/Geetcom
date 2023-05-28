@@ -3,6 +3,7 @@
 
 namespace App\Http\Traits;
 use App\Models\Notification;
+use App\Models\Order;
 use App\Models\PhoneToken;
 use App\Models\Setting;
 use App\Models\User;
@@ -23,9 +24,28 @@ trait NotificationTrait
        |
        */
 
-    public function sendFCMNotification($array_to, $title, $message, $type = null)
+    public function sendAllNotifications($array_to, $title, $message, $type = null,$order=null){
+        $data = [];
+        $data['order_id'] = $order['id'];
+        $data['status'] = $order['status'];
+        $data['order'] = Order::where('id', $order['id'])->first();
+        $data = json_encode($data);
+
+        $this->sendNotification($array_to, $title, $message, $type);
+        $this->sendFCMNotification($array_to, $title, $message, $type,$data);
+    }
+
+    //****************************************************************************************
+    public function sendFCMNotification($array_to, $title, $message, $type = null ,$data = null)
     {
+        if ($type == 'delivery') {
+            $tokens = PhoneToken::whereIn("delivery_id", $array_to)->pluck('phone_token')->toArray();
+        }
+        elseif ($type == 'market') {
+            $tokens = PhoneToken::where("market_id",$array_to )->pluck('phone_token')->toArray();
+        }else{
             $tokens = PhoneToken::whereIn("user_id", $array_to)->pluck('phone_token')->toArray();
+        }
 
         $SERVER_API_KEY = env('FIREBASE_KEY');
         $data = [
@@ -33,11 +53,13 @@ trait NotificationTrait
             "notification" => [
                 "title" => $title,
                 "body" => $message,
+                "data_" => $data,
                 "sound" => "default" // required for sound on ios
             ],
             "data" => [
                 "title" => $title,
                 "body" => $message,
+                "data_" => $data,
             ],
         ];
         $dataString = json_encode($data);
@@ -53,6 +75,7 @@ trait NotificationTrait
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
         $response = curl_exec($ch);
+//        return $response;
     }
 
     //****************************************************************************************
@@ -63,11 +86,25 @@ trait NotificationTrait
         $data['title'] = $title;
         $data['message'] = $message;
 
+        if ($type == 'delivery') {
+            foreach ($array_to as $delivery){
+                $data['delivery_id'] = $delivery;
+                Notification::create($data);
+                $data['delivery_id'] = null;
+            }
+        } elseif ($type == 'market') {
+            foreach ($array_to as $market){
+                $data['market_id'] = $market;
+                Notification::create($data);
+                $data['market_id'] = null;
+            }
+        }else {
             foreach ($array_to as $user){
                 $data['user_id'] = $user;
                 Notification::create($data);
                 $data['user_id'] = null;
             }
+        }
 
 
     }

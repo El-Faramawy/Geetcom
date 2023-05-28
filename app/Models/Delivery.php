@@ -35,4 +35,8 @@ class Delivery extends Authenticatable implements JWTSubject
         return $this->f_name.' '.$this->l_name;
     }
 
+    public function orders(){
+        return $this->hasMany(Order::class,'delivery_id');
+    }
+
 }

@@ -5,8 +5,8 @@
         var id = $(this).data('id');
         var text = $(this).data('text');
         swal.fire({
-            title: "هل أنت متأكد من "+ text +" المستخدم؟",
-            text: "سيتم "+text+" المستخدم",
+            title: "هل أنت متأكد من "+ text +" المطعم ؟",
+            text: "سيتم "+text+" المطعم ",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -20,7 +20,7 @@
             }
 
 
-            var url = '{{ url('admin/block_user') }}/'+id;
+            var url = '{{ url('admin/block_market') }}/'+id;
             // url = url.replace(':id', id)
             console.log(url);
             $.ajax({

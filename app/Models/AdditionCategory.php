@@ -10,6 +10,7 @@ class AdditionCategory extends Model
     use HasFactory;
 
     protected $appends =['name'];
+    protected $guarded = [];
     public function additions(){
         return $this->hasMany(Addition::class,'addition_category_id');
     }

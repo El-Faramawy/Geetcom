@@ -27,7 +27,7 @@ trait WithRelationTrait
     /* products */
     private function productRelations()
     {
-        return  ['category' , 'market','product_additions.addition'];
+        return  ['category' , 'market','product_additions.addition','product_additions_with_category'/*,'product_additions_with_category.addition_with_category'*/];
     }
     /* ========================= sliders ============================*/
     /* sliders */
@@ -45,7 +45,14 @@ trait WithRelationTrait
     /* category */
     private function marketRelations()
     {
-        return  ['market_category.category'/*,'products'*/];
+        return  [/*'market_category.category'*/'market_sub_category.sub_category.products'];
+    }
+    /* ========================= category ============================*/
+    /* category */
+    private function marketAllRelations()
+    {
+//        return  ['market_sub_category.sub_category.products','products'/*,'products.product_additions.addition'*/];
+        return  ['sub_categories.products'];
     }
     /* ========================= favouriteRelations ============================*/
     /* favouriteRelations */

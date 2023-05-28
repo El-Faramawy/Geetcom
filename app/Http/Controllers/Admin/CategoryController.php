@@ -33,7 +33,14 @@ class CategoryController extends Controller
                     }
                     return $action;
                 })
-
+                ->editColumn('image',function ($category){
+                    return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="'.$category->image.'">';
+                })
+                ->editColumn('featured',function ($item){
+                    $color = $item->featured == "yes" ? "success" :"danger";
+                    $text = $item->featured == "yes" ? "نعم" :"لا";
+                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
+                })
                 ->addColumn('checkbox' , function ($category){
                     return '<input type="checkbox" class="sub_chk" data-id="'.$category->id.'">';
                 })
@@ -53,16 +60,20 @@ class CategoryController extends Controller
         $valedator = Validator::make($request->all(), [
             'name_ar'=>'required',
             'name_en'=>'required',
-        ],
-            [
-                'name_ar.required' => 'الاسم بالعربية مطلوب',
-                'name_en.required' => 'الاسم بالانجليزية مطلوب',
-            ]
+            'image'=>'required',
+        ]
+//            ,
+//            [
+//                'name_ar.required' => 'الاسم بالعربية مطلوب',
+//                'name_en.required' => 'الاسم بالانجليزية مطلوب',
+//            ]
         );
         if ($valedator->fails())
             return response()->json(['messages' => $valedator->errors()->getMessages(), 'success' => 'false']);
 
         $data = $request->all();
+        if (isset($request->image))
+            $data['image']    = $this->saveImage($request->image,'uploads/Category');
         Category::create($data);
 
         return response()->json(
@@ -83,16 +94,19 @@ class CategoryController extends Controller
         $valedator = Validator::make($request->all(), [
             'name_ar'=>'required',
             'name_en'=>'required',
-        ],
-            [
-                'name_ar.required' => 'الاسم بالعربية مطلوب',
-                'name_en.required' => 'الاسم بالانجليزية مطلوب',
-            ]
+        ]
+//            ,
+//            [
+//                'name_ar.required' => 'الاسم بالعربية مطلوب',
+//                'name_en.required' => 'الاسم بالانجليزية مطلوب',
+//            ]
         );
         if ($valedator->fails())
             return response()->json(['messages' => $valedator->errors()->getMessages(), 'success' => 'false']);
 
         $data = $request->all();
+        if (isset($request->image))
+            $data['image']    = $this->saveImage($request->image,'uploads/Category',$category->image);
         $category->update($data);
 
         return response()->json(

@@ -7,6 +7,7 @@ use App\Http\Traits\PaginateTrait;
 use App\Http\Traits\WithRelationTrait;
 use App\Models\Favourate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class FavouriteController extends Controller
@@ -55,9 +56,20 @@ class FavouriteController extends Controller
     //================================================================
     public function favourite_markets(Request $request)
     {
+        $max_distance = setting()->num_of_kilos;
+        $lat = $request['lat'];
+        $lang = $request['lng'];
         $favourite = Favourate::with($this->favouriteRelations())
-            ->whereHas('market')
+            ->whereHas('market',function ($query) use ($max_distance,$lat,$lang){
+                $query->selectRaw('*, ( 3959 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance', [$lat, $lang, $lat])
+                    ->orderBy('distance', 'asc')
+                    ->where(['is_available'=>'yes'],['distance','<=',$max_distance]);
+            })
             ->where('user_id', user_api()->user()->id);
+//        $data = DB::table('markets')
+//            ->selectRaw('*, ( 3959 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance', [$lat, $lang, $lat])
+//            ->orderBy('distance', 'asc')
+//            ->where(['is_available'=>'yes'],['distance','<=',$max_distance]);
         return $this->apiResponse($favourite);
     }
 

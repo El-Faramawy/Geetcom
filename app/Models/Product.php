@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-
+    protected $guarded = [];
     protected $appends =['name','description','is_favourite'];
 
     //===================  name ===========================
@@ -60,6 +60,11 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    //===================  sub_category ===========================
+    public function sub_category()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
     //===================  market ===========================
     public function market()
     {
@@ -73,6 +78,9 @@ class Product extends Model
     public function product_additions_with_category(){
         return $this->hasMany(AdditionProduct::class,'product_id')->whereHas('addition_with_category');
     }
+//    public function product_additions_with_category_addition_ids(){
+//        return $this->product_additions_with_category()->pluck('addition_id')->toArray();
+//    }
 
     //===================  order_details ===========================
     public function order_details(){

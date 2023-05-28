@@ -4,17 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Market extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
     protected $appends =['name','location','is_favourite'];
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    protected $dates = ['deleted_at'];
+
     protected $guarded = [];
 
     public function getJWTIdentifier()
@@ -26,6 +30,12 @@ class Market extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function getImageAttribute(){
+        return  get_file($this->attributes['image']);
+    }
+    public function getPannerAttribute(){
+        return  get_file($this->attributes['panner']);
+    }
     //===================  name ===========================
     public function getNameAttribute(){
         $name = $this->attributes['name_ar'];
@@ -52,6 +62,16 @@ class Market extends Authenticatable implements JWTSubject
     public function market_category()
     {
         return $this->hasMany(MarketCategory::class);
+    }
+    //===================  market_sub_category ===========================
+    public function market_sub_category()
+    {
+        return $this->hasMany(MarketSubCategory::class);
+    }
+    //===================  sub_categories ===========================
+    public function sub_categories()
+    {
+        return $this->hasMany(SubCategory::class);
     }
 //    //===================  products ===========================
     public function products()

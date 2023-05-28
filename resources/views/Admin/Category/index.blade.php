@@ -30,7 +30,9 @@
                             <tr>
                                 <th class="text-white"><input type="checkbox" id="master"></th>
                                 <th class="text-white">#</th>
+                                <th class="text-white">الصورة</th>
                                 <th class="text-white">الاسم</th>
+                                <th class="text-white">قسم مميز</th>
                                 <th class="text-white">تحكم</th>
                             </tr>
                             </thead>
@@ -99,7 +101,9 @@
         var  columns =[
             {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
             {data: 'id', name: 'id'},
+            {data: 'image', name: 'image'},
             {data: 'name', name: 'name'},
+            {data: 'featured', name: 'featured'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];
         //======================== addBtn =============================

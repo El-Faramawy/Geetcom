@@ -14,6 +14,7 @@ class SettingController extends Controller
         $setting->terms_link = url('terms');
         $setting->privacy = url('privacy');
         $setting->about = url('about');
+        $setting->training = url('training');
         return $this->apiResponse($setting,'','simple');
     }
 

@@ -37,7 +37,7 @@
                     </a>
                 </li>
             @endif
-            @if(in_array(5,admin()->user()->permission_ids))
+            @if(in_array(11,admin()->user()->permission_ids))
                 <li class="slide">
                     <a class="side-menu__item" href="{{route('deliveries.index')}}">
                         <i class="fe fe-user-check side-menu__icon"></i>
@@ -45,7 +45,7 @@
                     </a>
                 </li>
             @endif
-            @if(in_array(5,admin()->user()->permission_ids))
+            @if(in_array(80,admin()->user()->permission_ids))
                 <li class="slide">
                     <a class="side-menu__item" href="{{route('markets.index')}}">
                         <i class="fe fe-user-check side-menu__icon"></i>
@@ -71,22 +71,22 @@
                 </a>
             </li>
         @endif
-        @if(in_array(60,admin()->user()->permission_ids))
-            <li class="slide">
-                <a class="side-menu__item" href="{{route('degrees.index')}}">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
-                         class="side-menu__icon">
-                        <path d="M0 0h24v24H0V0z" fill="none"/>
-                        <path d="M5 5h4v4H5zm10 10h4v4h-4zM5 15h4v4H5zM16.66 4.52l-2.83 2.82 2.83 2.83 2.83-2.83z"
-                              opacity=".3"/>
-                        <path
-                            d="M16.66 1.69L11 7.34 16.66 13l5.66-5.66-5.66-5.65zm-2.83 5.65l2.83-2.83 2.83 2.83-2.83 2.83-2.83-2.83zM3 3v8h8V3H3zm6 6H5V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm8-2v8h8v-8h-8zm6 6h-4v-4h4v4z"/>
-                    </svg>
-                    <span class="side-menu__label">تخصصات الاطباء</span>
-                </a>
-            </li>
-        @endif
-{{--        @if(in_array(80,admin()->user()->permission_ids))--}}
+{{--        @if(in_array(60,admin()->user()->permission_ids))--}}
+{{--            <li class="slide">--}}
+{{--                <a class="side-menu__item" href="{{route('sub_categories.index')}}">--}}
+{{--                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"--}}
+{{--                         class="side-menu__icon">--}}
+{{--                        <path d="M0 0h24v24H0V0z" fill="none"/>--}}
+{{--                        <path d="M5 5h4v4H5zm10 10h4v4h-4zM5 15h4v4H5zM16.66 4.52l-2.83 2.82 2.83 2.83 2.83-2.83z"--}}
+{{--                              opacity=".3"/>--}}
+{{--                        <path--}}
+{{--                            d="M16.66 1.69L11 7.34 16.66 13l5.66-5.66-5.66-5.65zm-2.83 5.65l2.83-2.83 2.83 2.83-2.83 2.83-2.83-2.83zM3 3v8h8V3H3zm6 6H5V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm8-2v8h8v-8h-8zm6 6h-4v-4h4v4z"/>--}}
+{{--                    </svg>--}}
+{{--                    <span class="side-menu__label">الاقسام الفرعية</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+{{--        @endif--}}
+        @if(in_array(72,admin()->user()->permission_ids))
             <li class="slide">
                 <a class="side-menu__item" href="{{route('sliders.index')}}">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
@@ -99,10 +99,19 @@
                     <span class="side-menu__label">صور العرض</span>
                 </a>
             </li>
+        @endif
+{{--        @if(in_array(23,admin()->user()->permission_ids))--}}
+{{--            <li class="slide">--}}
+{{--                <a class="side-menu__item" href="{{route('products.index')}}">--}}
+{{--                    <i class="fe fe-menu  side-menu__icon"></i>--}}
+{{--                    <span class="side-menu__label">المنتجات</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
 {{--        @endif--}}
-        @if(in_array(84,admin()->user()->permission_ids))
+
+        @if(in_array(76,admin()->user()->permission_ids))
             <li class="slide">
-                <a class="side-menu__item" href="{{route('brands.index')}}">
+                <a class="side-menu__item" href="{{route('coupons.index')}}">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
                          class="side-menu__icon">
                         <path d="M0 0h24v24H0V0z" fill="none"/>
@@ -110,21 +119,14 @@
                         <path
                             d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/>
                     </svg>
-                    <span class="side-menu__label">الموديلات</span>
+                    <span class="side-menu__label">الكوبونات</span>
                 </a>
             </li>
         @endif
-        @if(in_array(92,admin()->user()->permission_ids))
+
+        @if(in_array(64,admin()->user()->permission_ids))
             <li class="slide">
-                <a class="side-menu__item" href="{{route('part_types.index')}}">
-                    <i class="fe fe-menu  side-menu__icon"></i>
-                    <span class="side-menu__label">انواع قطع الغيار</span>
-                </a>
-            </li>
-        @endif
-        @if(in_array(88,admin()->user()->permission_ids))
-            <li class="slide">
-                <a class="side-menu__item" href="{{route('parts.index')}}">
+                <a class="side-menu__item" href="{{route('addition_categories.index')}}">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
                          class="side-menu__icon">
                         <path d="M0 0h24v24H0V0z" fill="none"/>
@@ -134,14 +136,30 @@
                         <path
                             d="M20 13H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zm-1 6H5v-4h14v4zm-12-.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM20 3H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zm-1 6H5V5h14v4zM7 8.5c.83 0 1.5-.67 1.5-1.5S7.83 5.5 7 5.5 5.5 6.17 5.5 7 6.17 8.5 7 8.5z"/>
                     </svg>
-                    <span class="side-menu__label">قطع الغيار</span>
+                    <span class="side-menu__label">اقسام الاضافات</span>
+                </a>
+            </li>
+        @endif
+        @if(in_array(68,admin()->user()->permission_ids))
+            <li class="slide">
+                <a class="side-menu__item" href="{{route('additions.index')}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
+                         class="side-menu__icon">
+                        <path d="M0 0h24v24H0V0z" fill="none"/>
+                        <path
+                            d="M5 9h14V5H5v4zm2-3.5c.83 0 1.5.67 1.5 1.5S7.83 8.5 7 8.5 5.5 7.83 5.5 7 6.17 5.5 7 5.5zM5 19h14v-4H5v4zm2-3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"
+                            opacity=".3"/>
+                        <path
+                            d="M20 13H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zm-1 6H5v-4h14v4zm-12-.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM20 3H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zm-1 6H5V5h14v4zM7 8.5c.83 0 1.5-.67 1.5-1.5S7.83 5.5 7 5.5 5.5 6.17 5.5 7 6.17 8.5 7 8.5z"/>
+                    </svg>
+                    <span class="side-menu__label">الاضافات</span>
                 </a>
             </li>
         @endif
 
         @if(in_array(39,admin()->user()->permission_ids))
             <li class="slide">
-                <a class="side-menu__item" href="{{route('reservations.index')}}">
+                <a class="side-menu__item" href="{{route('orders.index')}}">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
                          class="side-menu__icon">
                         <path d="M0 0h24v24H0V0z" fill="none"/>
@@ -149,20 +167,33 @@
                         <path
                             d="M15.55 13c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.48-.87-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7l1.1-2h7.45zM6.16 6h12.15l-2.76 5H8.53L6.16 6zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                     </svg>
-                    <span class="side-menu__label">كل الحجوزات</span>
+                    <span class="side-menu__label">كل الطلبات</span>
                 </a>
             </li>
         @endif
 
-{{--        @if(in_array(42,admin()->user()->permission_ids))--}}
-{{--            <li class="slide">--}}
-{{--                <a class="side-menu__item" href="{{route('notifications.index')}}">--}}
-{{--                    <i class="fe fe-bell side-menu__icon "></i>--}}
-{{--                    <span class="side-menu__label">الاشعارات</span>--}}
-{{--                </a>--}}
-{{--            </li>--}}
-{{--        @endif--}}
-
+        @if(in_array(42,admin()->user()->permission_ids))
+            <li class="slide">
+                <a class="side-menu__item" href="{{route('notifications.index')}}">
+                    <i class="fe fe-bell side-menu__icon "></i>
+                    <span class="side-menu__label">الاشعارات</span>
+                </a>
+            </li>
+        @endif
+        @if(in_array(85,admin()->user()->permission_ids))
+            <li class="slide">
+                <a class="side-menu__item" href="{{route('supports.index')}}">
+                    <i class="fe fe-alert-circle side-menu__icon "></i>
+                    <span class="side-menu__label">الدعم و المساعدة</span>
+                </a>
+            </li>
+        @endif
+        <li class="slide">
+            <a class="side-menu__item" href="{{route('chats.index')}}">
+                <i class="fa fa-comments-o side-menu__icon "></i>
+                <span class="side-menu__label">رسائل الشات</span>
+            </a>
+        </li>
         @if(in_array(19,admin()->user()->permission_ids))
             <li class="slide">
                 <a class="side-menu__item" href="{{route('contacts.index')}}">

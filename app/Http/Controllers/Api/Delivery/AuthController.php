@@ -105,7 +105,7 @@ class AuthController extends Controller
         if ($validator->fails()){
             return $this->apiResponse(null,$validator->errors(),'simple','422');
         }
-        $data = $request->only('f_name','phone','l_name','password','image');
+        $data = $request->only('f_name','phone','l_name','password','image','latitude','longitude');
         if ($request->password && $request->password != null){
             $data['password'] = Hash::make($request->password);
         }

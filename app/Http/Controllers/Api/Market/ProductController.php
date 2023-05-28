@@ -45,9 +45,10 @@ class ProductController extends Controller
     //================================================================================
     public function products(Request $request){
 
-        $market = Market::with($this->marketRelations())->where('id',market_api()->user()->id)->first();
-        foreach ($market->market_category as $category){
-            $category['products'] = $this->apiResponse(Product::where('category_id', $category->category_id));
+//        $market = Market::with($this->marketRelations())->where('id',market_api()->user()->id)->first();
+        $market = Market::with($this->marketAllRelations())->where('id',market_api()->user()->id)->first();
+        foreach ($market->sub_categories as $category){
+            $category['products'] = $this->apiResponse($category->products());
         }
         return $this->apiResponse($market,'','simple');
     }

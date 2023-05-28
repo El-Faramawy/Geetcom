@@ -29,17 +29,17 @@ class UserController extends Controller
                        ';
                     }
                 })
-//                ->addColumn('orders', function ($user) {
-//                    $order_data = '<a  class="btn btn-icon btn-bg-light btn-info btn-sm me-1 "
-//                            href="'.route("orders.index","user_id=".$user->id).'" >
-//                            <span class="svg-icon svg-icon-3">
-//                                <span class="svg-icon svg-icon-3">
-//                                    <i class="fa fa-shopping-basket "></i>
-//                                </span>
-//                            </span>
-//                            </button>';
-//                    return in_array(39,admin()->user()->permission_ids) ?$order_data :'';
-//                })
+                ->addColumn('orders', function ($user) {
+                    $order_data = '<a  class="btn btn-icon btn-bg-light btn-info btn-sm me-1 "
+                            href="'.route("orders.index","user_id=".$user->id).'" >
+                            <span class="svg-icon svg-icon-3">
+                                <span class="svg-icon svg-icon-3">
+                                    <i class="fa fa-shopping-basket "></i>
+                                </span>
+                            </span>
+                            </button>';
+                    return in_array(39,admin()->user()->permission_ids) ?$order_data :'';
+                })
                 ->editColumn('image',function ($user){
                     return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="'.$user->image.'">';
                 })

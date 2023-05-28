@@ -17,7 +17,8 @@ class HomeController extends Controller
 use WithRelationTrait , PaginateTrait;
     public function index(Request $request){
         $data =[];
-        $day = date('Y-m-d',strtotime($request->date))?:date('Y-m-d');
+        $chart_day = $request->date ? date('Y-m-d',strtotime($request->date)):date('Y-m-d');
+        $day = date('Y-m-d');
         $ended_orders = Order::where(['market_id'=>market_api()->user()->id , 'status'=>'ended'])->whereDate('created_at',$day);
         $data['ended_orders'] = $ended_orders->count();
         $data['total_profit'] = $ended_orders->sum('total');
@@ -29,8 +30,8 @@ use WithRelationTrait , PaginateTrait;
 
         for($i =0;$i <= 9;$i++){
             $data['days_order'][$i]['order_number'] = Order::where(['market_id'=>market_api()->user()->id , 'status'=>'ended'])
-                ->whereDate('created_at',date('Y-m-d',strtotime('-'.$i.' day')) )->count();
-            $data['days_order'][$i]['date'] = date('Y-m-d',strtotime('-'.$i.' day'));
+                ->whereDate('created_at',date('Y-m-d',strtotime($chart_day .'-'.$i.' day')) )->count();
+            $data['days_order'][$i]['date'] = date('Y-m-d',strtotime($chart_day .'-'.$i.' day'));
         }
 
         return $this->apiResponse($data,null,'simple');

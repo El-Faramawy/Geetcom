@@ -8,6 +8,14 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
     Route::post('login','AuthController@login');
     Route::post('register', 'AuthController@register');
 
+    Route::post('get_register_code','AuthController@get_register_code');
+    Route::post('ConfirmRegisterCode','AuthController@ConfirmRegisterCode');
+
+    Route::post('get_code','ForgetPasswordController@get_code');
+    Route::post('ConfirmCode','ForgetPasswordController@ConfirmCode');
+    Route::post('UpdatePassword','ForgetPasswordController@UpdatePassword');
+
+
     Route::group(['middleware' => 'all_guards:user_api'], function () {
 
         Route::get('profile', 'AuthController@profile');
@@ -17,6 +25,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
         /* ---------------------- notifications -------------------*/
         Route::get('wallet_coupon', 'WalletController@wallet_coupon');
         Route::post('update_points', 'WalletController@update_points');
+        Route::post('add_wallet','WalletController@add_wallet');
 
         /* ---------------------- notifications -------------------*/
         Route::get('notifications', 'NotificationController@notifications');
@@ -25,6 +34,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
         /* ---------------------- home -------------------*/
         Route::get('home','HomeController@index');
         Route::get('market_search','HomeController@market_search');
+        Route::get('get_delivery_data','HomeController@get_delivery_data');
 
         /* ---------------------- Category -------------------*/
         Route::get('category','CategoryController@index');
@@ -32,6 +42,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
 
         /* ---------------------- market -------------------*/
         Route::get('market','MarketController@index');
+        Route::get('market_all_data','MarketController@market_all_data');
 
         /* ---------------------- product -------------------*/
         Route::get('product','ProductController@index');
@@ -64,13 +75,15 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
         Route::get('previous_orders', 'OrderController@previous_orders');
         Route::post('rate_order', 'OrderController@rate_order');
         Route::post('support_order', 'OrderController@support_order');
+        Route::post('change_order_status', 'OrderController@change_order_status');
 
         /* ---------------------- contact -------------------*/
         Route::post('contact_with_user','ContactController@contact_with_user');
 
-        /* ---------------------- contact -------------------*/
+        /* ---------------------- chat -------------------*/
         Route::get('get_chat','ChatController@get_chat');
         Route::post('send_message','ChatController@send_message');
+
 
 
 

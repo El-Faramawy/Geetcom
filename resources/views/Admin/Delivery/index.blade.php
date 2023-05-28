@@ -8,7 +8,7 @@
                 <div class="card-header">
                     <h3 class="card-title" >المناديب</h3>
                     <div class="mr-auto pageheader-btn">
-                        @if(in_array(7,admin()->user()->permission_ids))
+                        @if(in_array(13,admin()->user()->permission_ids))
                             <a href="#" id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
                                             <span>
                                                 <i class="fa fa-trash-o"></i>
@@ -27,9 +27,10 @@
                                 <th class="text-white">الصورة</th>
                                 <th class="text-white">الاسم</th>
                                 <th class="text-white">رقم الهاتف</th>
-{{--                                <th class="text-white">الطلبات</th>--}}
                                 <th class="text-white">النقاط</th>
                                 <th class="text-white">المحفظة</th>
+                                <th class="text-white">العنوان</th>
+                                <th class="text-white">الطلبات</th>
                                 <th class="text-white">حظر</th>
                                 <th class="text-white">تحكم</th>
                             </tr>
@@ -57,6 +58,8 @@
             {data: 'phone', name: 'phone'},
             {data: 'points', name: 'points'},
             {data: 'wallet', name: 'wallet'},
+            {data: 'address', name: 'address'},
+            {data: 'orders', name: 'orders'},
             {data: 'block', name: 'block'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];

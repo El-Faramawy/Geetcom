@@ -37,11 +37,13 @@ class CartController extends Controller
         $cart->save();
 
         CartAddition::where('cart_id',$cart->id)->delete();
-        foreach ($request['additions'] as $cart_addition){
-            CartAddition::create([
-                'cart_id'=>$cart->id,
-                'addition_id'=>$cart_addition
-            ]);
+        if ($request['additions']){
+            foreach ($request['additions'] as $cart_addition){
+                CartAddition::create([
+                    'cart_id'=>$cart->id,
+                    'addition_id'=>$cart_addition
+                ]);
+            }
         }
 
         $cart = Cart::with($this->cartRelations())->where('id',$cart->id)->first();

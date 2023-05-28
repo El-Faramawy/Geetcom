@@ -27,9 +27,9 @@
                                 <th class="text-white">الصورة</th>
                                 <th class="text-white">الاسم</th>
                                 <th class="text-white">رقم الهاتف</th>
-{{--                                <th class="text-white">الطلبات</th>--}}
                                 <th class="text-white">النقاط</th>
                                 <th class="text-white">المحفظة</th>
+                                <th class="text-white">الطلبات</th>
                                 <th class="text-white">حظر</th>
                                 <th class="text-white">تحكم</th>
                             </tr>
@@ -57,6 +57,7 @@
             {data: 'phone', name: 'phone'},
             {data: 'points', name: 'points'},
             {data: 'wallet', name: 'wallet'},
+            {data: 'orders', name: 'orders'},
             {data: 'block', name: 'block'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];

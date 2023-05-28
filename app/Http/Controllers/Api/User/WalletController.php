@@ -65,5 +65,22 @@ class WalletController extends Controller
         return $this->apiResponse($user,'','simple');
 
     }
+    //======================================================================
+    public function add_wallet(Request $request){
+        $validator = Validator::make($request->all(),[
+            'amount'=>'required',
+        ]);
+        if ($validator->fails()){
+            return $this->apiResponse(null,$validator->errors(),'simple','422');
+        }
+
+        user_api()->user()->update([
+            'wallet' => user_api()->user()->wallet + $request->amount
+        ]);
+
+        $user = User::where('id',user_api()->user()->id)->first();
+        return $this->apiResponse($user,'','simple');
+
+    }
 
 }

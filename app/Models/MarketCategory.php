@@ -9,6 +9,7 @@ class MarketCategory extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     //===================  category ===========================
     public function category()
     {

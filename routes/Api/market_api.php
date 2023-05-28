@@ -31,6 +31,7 @@ Route::group(['prefix' => 'market', 'namespace' => 'Market'], function () {
         Route::get('order_details', 'OrderController@order_details');
         Route::get('current_orders', 'OrderController@current_orders');
         Route::get('previous_orders', 'OrderController@previous_orders');
+        Route::get('orders_by_status', 'OrderController@orders_by_status');
 
         /* ---------------------- statistics -------------------*/
         Route::get('statistics', 'StatisticsController@index');

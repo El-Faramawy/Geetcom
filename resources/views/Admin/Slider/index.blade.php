@@ -7,30 +7,32 @@
                 <div class="card-header">
                     <h3 class="card-title">صور العرض</h3>
                     <div class="mr-auto pageheader-btn">
-{{--                        @if(in_array(83,admin()->user()->permission_ids))--}}
+                        @if(in_array(75,admin()->user()->permission_ids))
                             <a href="#" id="addBtn" class="btn btn-primary btn-icon text-white">
                                             <span>
                                                 <i class="fe fe-plus"></i>
                                             </span> اضافة جديد
                             </a>
-{{--                        @endif--}}
-{{--                        @if(in_array(82,admin()->user()->permission_ids))--}}
+                        @endif
+                        @if(in_array(74,admin()->user()->permission_ids))
                             <a href="#" id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
                                             <span>
                                                 <i class="fa fa-trash-o"></i>
                                             </span> حذف المحدد
                             </a>
-{{--                        @endif--}}
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="{{--table-responsive--}}">
+                    <div class="table-responsive">
                         <table id="exportexample" class="table table-striped table-responsive-lg  card-table table-vcenter text-nowrap mb-0 table-primary align-items-center mb-0">
                             <thead class="bg-primary text-white">
                             <tr>
                                 <th class="text-white"><input type="checkbox" id="master"></th>
                                 <th class="text-white">#</th>
-                                <th class="text-white">الصورة</th>
+                                <th class="text-white">النوع</th>
+                                <th class="text-white">المنتج</th>
+                                <th class="text-white">المطعم</th>
                                 <th class="text-white">تحكم</th>
                             </tr>
                             </thead>
@@ -99,7 +101,9 @@
         var  columns =[
             {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
             {data: 'id', name: 'id'},
-            {data: 'image', name: 'image'},
+            {data: 'type', name: 'type'},
+            {data: 'product', name: 'product'},
+            {data: 'market', name: 'market'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];
         //======================== addBtn =============================
