@@ -26,10 +26,12 @@ trait NotificationTrait
 
     public function sendAllNotifications($array_to, $title, $message, $type = null,$order=null){
         $data = [];
-        $data['order_id'] = $order['id'];
-        $data['status'] = $order['status'];
-        $data['order'] = Order::where('id', $order['id'])->first();
-        $data = json_encode($data);
+        if ($order!=null){
+            $data['order_id'] = $order['id'];
+            $data['status'] = $order['status'];
+            $data['order'] = Order::where('id', $order['id'])->first();
+            $data = json_encode($data);
+        }
 
         $this->sendNotification($array_to, $title, $message, $type);
         $this->sendFCMNotification($array_to, $title, $message, $type,$data);

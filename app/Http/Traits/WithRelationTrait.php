@@ -70,7 +70,7 @@ trait WithRelationTrait
     /* order */
     private function orderRelations()
     {
-        return [ 'order_details.product','order_details.additions.addition', 'coupon', 'address','delivery','user'];
+        return [ 'order_details.product','order_details.additions.addition', 'coupon', 'address','delivery','user','market'];
     }
     /* ========================= chatRelations ============================*/
     /* chatRelations */

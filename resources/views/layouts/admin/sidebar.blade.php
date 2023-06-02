@@ -188,12 +188,12 @@
                 </a>
             </li>
         @endif
-        <li class="slide">
-            <a class="side-menu__item" href="{{route('chats.index')}}">
-                <i class="fa fa-comments-o side-menu__icon "></i>
-                <span class="side-menu__label">رسائل الشات</span>
-            </a>
-        </li>
+{{--        <li class="slide">--}}
+{{--            <a class="side-menu__item" href="{{route('chats.index')}}">--}}
+{{--                <i class="fa fa-comments-o side-menu__icon "></i>--}}
+{{--                <span class="side-menu__label">رسائل الشات</span>--}}
+{{--            </a>--}}
+{{--        </li>--}}
         @if(in_array(19,admin()->user()->permission_ids))
             <li class="slide">
                 <a class="side-menu__item" href="{{route('contacts.index')}}">

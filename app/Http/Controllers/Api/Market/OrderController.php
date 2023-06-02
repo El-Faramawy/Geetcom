@@ -30,6 +30,9 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return $this->apiResponse(null, $validator->errors(),'simple', 422);
         }
+        if ( $request->status == 'delivery') {
+            return $this->apiResponse(null, 'order status is delivery','simple', 422);
+        }
 
         $order = Order::where('id', $request->order_id)->with($this->orderRelations())->first();
         $order->update(['status'=>$request->status]);
@@ -43,11 +46,14 @@ class OrderController extends Controller
 //            $this->sendAllNotifications([$order->user_id], 'تم قبول الطلب من المتجر', 'تم قبول الطلب من المتجر','user',$order);
             $deliveries = Delivery::whereHas('orders',function ($query){
                 $query->whereIn('status',['accepted','in_market_way','wait_order','delivery']);
-            })
+            })->withCount('orders')
+                ->having('orders_count', '>=', 2)
+//                ->where('orders_count','>=',2)
 //                ->selectRaw('id, ( 3959 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance', [$order->address->latitude, $order->address->longitude, $order->address->latitude])
                 ->pluck('id')->toArray();
-
+//            return $deliveries;
             $otherDel = Delivery::whereNotIn('id',$deliveries)
+                ->where('is_available','yes')
                 ->selectRaw('id, ( 3959 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance', [$order->address->latitude, $order->address->longitude, $order->address->latitude])
                 ->get();
             $del = [];

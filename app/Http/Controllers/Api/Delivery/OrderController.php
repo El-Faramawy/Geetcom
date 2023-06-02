@@ -38,9 +38,12 @@ class OrderController extends Controller
 
             $deliveries = Delivery::whereHas('orders',function ($query){
                 $query->whereIn('status',['accepted','in_market_way','wait_order','delivery']);
-            })->pluck('id')->toArray();
+            })->withCount('orders')
+                ->having('orders_count', '>=', 2)
+                ->pluck('id')->toArray();
 
             $otherDel = Delivery::whereNotIn('id',$deliveries)
+                ->where([['is_available','yes'],['id','!=',delivery_api()->user()->id]])
                 ->selectRaw('id, ( 3959 * acos( cos( radians(?) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(?) ) + sin( radians(?) ) * sin( radians( latitude ) ) ) ) AS distance', [$order->address->latitude, $order->address->longitude, $order->address->latitude])
                 ->get();
             $del = [];
@@ -61,6 +64,10 @@ class OrderController extends Controller
                     $delivery->points += setting()->delivery_order_points;
                     $delivery->save();
                 }
+                $this->sendAllNotifications([$order->user_id], 'تم توصيل طلبك بنجاح', 'تم توصيل طلبك بنجاح الان بطلباتك السابقة','user',$order);
+            }
+            if($order->status == 'in_market_way'){
+                $order->update(['delivery_id'=>delivery_api()->user()->id]);
             }
             if($order->status == 'delivery'){
                 $order->update(['delivery_time'=>date('H:i:s')]);

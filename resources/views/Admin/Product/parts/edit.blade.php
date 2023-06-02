@@ -6,20 +6,20 @@
 
     <div class="row mt-0">
         <!--begin::Input group-->
-        <div class="d-flex flex-column mb-2 fv-row col-sm-6 mt-0">
-            <!--begin::Label-->
-            <label class="d-flex align-items-center fs-6 fw-bold form-label ">
-                <span class="required">المطعم </span>
-                <i class="fa fa-exclamation-circle ms-2 fs-7 text-primary " title="المطعم"></i>
-            </label>
-            <!--end::Label-->
-            <select name="market_id" id="market_id" class="form-control form-control-solid select2">
-                <option value="" selected disabled>المطعم</option>
-                @foreach($markets as $market)
-                    <option {{$product->market_id == $market->id?'selected':''}} value="{{$market->id}}">{{$market->name_ar}}</option>
-                @endforeach
-            </select>
-        </div>
+{{--        <div class="d-flex flex-column mb-2 fv-row col-sm-6 mt-0">--}}
+{{--            <!--begin::Label-->--}}
+{{--            <label class="d-flex align-items-center fs-6 fw-bold form-label ">--}}
+{{--                <span class="required">المطعم </span>--}}
+{{--                <i class="fa fa-exclamation-circle ms-2 fs-7 text-primary " title="المطعم"></i>--}}
+{{--            </label>--}}
+{{--            <!--end::Label-->--}}
+{{--            <select name="market_id" id="market_id" class="form-control form-control-solid select2">--}}
+{{--                <option value="" selected disabled>المطعم</option>--}}
+{{--                @foreach($markets as $market)--}}
+{{--                    <option {{$product->market_id == $market->id?'selected':''}} value="{{$market->id}}">{{$market->name_ar}}</option>--}}
+{{--                @endforeach--}}
+{{--            </select>--}}
+{{--        </div>--}}
         <!--begin::Input group-->
 {{--        <div class="d-flex flex-column mb-2 fv-row col-sm-6 mt-0">--}}
 {{--            <!--begin::Label-->--}}
@@ -37,18 +37,18 @@
 {{--        </div>--}}
         <!--end::Input group-->
         <!--begin::Input group-->
-        <div class="d-flex flex-column mb-2 fv-row col-sm-6">
-            <label class="d-flex align-items-center fs-6 fw-bold form-label ">
-                <span class="required"> القسم الفرعى </span>
-                <i class="fa fa-exclamation-circle ms-2 fs-7  text-primary" title="القسم الفرعى"></i>
-            </label>
-            <select class="form-control select2"  name="sub_category_id" data-placeholder="اختر القسم الفرعى ..." >
-                @foreach($sub_categories as $sub_category)
-                    <option {{$sub_category->id == $market->sub_category_id ?'selected':''}} value="{{$sub_category->id}}"> {{$sub_category->name_ar}} </option>
-                @endforeach
-            </select>
+{{--        <div class="d-flex flex-column mb-2 fv-row col-sm-6">--}}
+{{--            <label class="d-flex align-items-center fs-6 fw-bold form-label ">--}}
+{{--                <span class="required"> القسم الفرعى </span>--}}
+{{--                <i class="fa fa-exclamation-circle ms-2 fs-7  text-primary" title="القسم الفرعى"></i>--}}
+{{--            </label>--}}
+{{--            <select class="form-control select2"  name="sub_category_id" data-placeholder="اختر القسم الفرعى ..." >--}}
+{{--                @foreach($sub_categories as $sub_category)--}}
+{{--                    <option {{$sub_category->id == $market->sub_category_id ?'selected':''}} value="{{$sub_category->id}}"> {{$sub_category->name_ar}} </option>--}}
+{{--                @endforeach--}}
+{{--            </select>--}}
 
-        </div>
+{{--        </div>--}}
         <!--begin::Input group-->
         <div class="d-flex flex-column mb-2 fv-row col-sm-12 col-md-6 mt-0">
             <!--begin::Label-->
